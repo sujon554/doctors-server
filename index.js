@@ -44,7 +44,15 @@ async function run () {
                 res.send(users);
               });
 
-   
+              
+    // Single Doctors details
+    app.get("/doctors/:id" , async(req, res) => {
+        const id = req.params.id;
+      console.log("Single Doctors", id);
+      const query = { _id: ObjectId(id) };
+      const result = await doctorsCollection.findOne(query);
+      res.json(result);
+    })
 
 
 
