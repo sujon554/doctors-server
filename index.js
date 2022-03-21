@@ -54,7 +54,13 @@ async function run () {
       res.json(result);
     })
 
-
+ //POST API For Orders doctor
+ app.post("/allorders", async (req, res) => {
+    const order = req.body;
+    const result = await orderCollection.insertOne(order);
+    console.log(result);
+    res.json(result);
+  });
 
     } 
     finally {
