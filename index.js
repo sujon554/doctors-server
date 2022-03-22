@@ -70,6 +70,15 @@ async function run () {
     res.json(orders);
   });
 
+  //Delete Single Order From All Orders
+  app.delete("/allorders/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await orderCollection.deleteOne(query);
+   
+    res.json(result);
+  });
+
   //delete dashboard from admin
   app.delete("/doctors/:id", async (req, res) => {
     const id = req.params.id;
