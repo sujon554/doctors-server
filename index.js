@@ -63,6 +63,13 @@ async function run () {
     res.json(result);
   });
 
+   //GET All Orders API
+   app.get("/allorders", async (req, res) => {
+    const cursor = orderCollection.find({});
+    const orders = await cursor.toArray();
+    res.json(orders);
+  });
+
   //delete dashboard from admin
   app.delete("/doctors/:id", async (req, res) => {
     const id = req.params.id;
