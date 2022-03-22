@@ -28,6 +28,7 @@ async function run () {
         const database = client.db("Healthcare");
         const doctorsCollection = database.collection("doctors");
         const orderCollection = database.collection("order");
+        const userCollection = database.collection("users");
 
 
 
@@ -62,12 +63,54 @@ async function run () {
     res.json(result);
   });
 
+  //delete dashboard from admin
   app.delete("/doctors/:id", async (req, res) => {
     const id = req.params.id;
     const query = { _id: ObjectId(id) };
     const result = await doctorsCollection.deleteOne(query);
     res.json(result);
   });
+
+ //POST API For Users
+ app.post("/users", async (req, res) => {
+  const user = req.body;
+  const result = await userCollection.insertOne(user);
+  res.json(result);
+});
+
+ //Get Users API
+ app.get("/users", async (req, res) => {
+  const cursor = userCollection.find({});
+  const users = await cursor.toArray();
+  res.json(users);
+});
+
+ //Make Admin
+ app.put("/users/admin", async (req, res) => {
+  const user = req.body;
+  console.log("put", user);
+  const filter = { email: user.email };
+  const updateDoc = { $set: { role: "admin" } };
+  const result = await userCollection.updateOne(filter, updateDoc);
+  res.json(result);
+});
+
+
+ //Admin Verfication
+ app.get("/users/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = { email: email };
+  const user = await userCollection.findOne(query);
+  let isAdmin = false;
+  if (user?.role === "admin") {
+    isAdmin = true;
+  }
+  res.json({ admin: isAdmin });
+});
+
+
+
+
 
     } 
     finally {
